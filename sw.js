@@ -1,11 +1,12 @@
-const CACHE_NAME = 'artcuadros-v3';
+const CACHE_NAME = 'artcuadros-v4';
 const STATIC_ASSETS = [
   './',
   './index.html',
   './css/style.css',
   './js/app.js',
   './manifest.webmanifest',
-  './icons/logo-source.webp',
+  './icons/logo-artcuadros.png',
+  './icons/splash-logo.png',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/apple-touch-icon.png'

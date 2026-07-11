@@ -54,9 +54,34 @@ body {
 }
 
 .logo {
-  height: 36px;
-  width: auto;
+  height: 40px;
+  width: 40px;
   object-fit: contain;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.app-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+
+.app-splash img {
+  width: min(42vw, 160px);
+  height: min(42vw, 160px);
+  object-fit: contain;
+}
+
+.app-splash.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .install-btn {

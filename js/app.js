@@ -21,6 +21,7 @@ const installBanner = document.getElementById('install-banner');
 const installBannerBtn = document.getElementById('install-banner-btn');
 const installBannerSkip = document.getElementById('install-banner-skip');
 const installIosHelp = document.getElementById('install-ios-help');
+const appSplash = document.getElementById('app-splash');
 
 const urlParams = new URLSearchParams(window.location.search);
 const wantsInstall = urlParams.get('install') === '1';
@@ -303,7 +304,15 @@ async function loadProducts() {
     errorEl.classList.remove('hidden');
   } finally {
     loading.classList.add('hidden');
+    hideAppSplash();
   }
+}
+
+function hideAppSplash() {
+  if (!appSplash || appSplash.classList.contains('is-hidden')) return;
+  appSplash.classList.add('is-hidden');
+  appSplash.setAttribute('aria-hidden', 'true');
+  setTimeout(() => appSplash.remove(), 500);
 }
 
 sheetBuy.addEventListener('click', () => {
@@ -378,3 +387,4 @@ if ('serviceWorker' in navigator) {
 }
 
 loadProducts();
+setTimeout(hideAppSplash, 2500);

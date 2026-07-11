@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#1a1a1a">
+  <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Catálogo de cuadros Art Cuadros. Compra desde la app y obtén un 20% de descuento.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -20,9 +20,13 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <div id="app-splash" class="app-splash" aria-hidden="false">
+    <img src="icons/splash-logo.png" alt="Art Cuadros" width="160" height="160">
+  </div>
+
   <header class="header">
     <div class="header-inner">
-      <img src="icons/logo-source.webp" alt="Art Cuadros" class="logo" width="120" height="40">
+      <img src="icons/logo-artcuadros.png" alt="Art Cuadros" class="logo" width="40" height="40">
       <button id="install-btn" class="install-btn hidden" type="button">Instalar app</button>
     </div>
   </header>
@@ -79,7 +83,7 @@
 
   <div id="install-banner" class="install-banner hidden" role="dialog" aria-modal="true">
     <div class="install-banner-inner">
-      <img src="icons/icon-192.png" alt="Art Cuadros" class="install-banner-icon">
+      <img src="icons/splash-logo.png" alt="Art Cuadros" class="install-banner-icon">
       <h2>Instala Art Cuadros</h2>
       <p>Toca <strong>Instalar</strong> para tener la app en tu móvil con acceso directo al catálogo y pago.</p>
       <button id="install-banner-btn" type="button" class="buy-btn">Instalar en mi móvil</button>

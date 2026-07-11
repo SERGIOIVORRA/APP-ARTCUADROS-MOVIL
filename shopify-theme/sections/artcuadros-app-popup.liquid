@@ -1,0 +1,379 @@
+{%- if section.settings.enabled -%}
+  {%- assign ac_app_url = section.settings.app_url | strip -%}
+  {%- if ac_app_url == blank -%}
+    {%- assign ac_app_url = 'https://sergioivorra.github.io/APP-ARTCUADROS-MOVIL/' -%}
+  {%- endif -%}
+  {%- unless ac_app_url contains '://' -%}
+    {%- assign ac_app_url = 'https://' | append: ac_app_url -%}
+  {%- endunless -%}
+
+  <div
+    class="ac-app-section"
+    id="ac-app-section-{{ section.id }}"
+    data-ac-app-popup
+    data-delay="{{ section.settings.delay_seconds | times: 1000 }}"
+    data-app-url="{{ ac_app_url | escape }}"
+    data-mobile-only="{{ section.settings.mobile_only }}"
+    data-storage-key="artcuadros_app_popup_{{ section.id }}"
+    hidden
+  >
+    <div class="ac-app-popup-backdrop" data-ac-backdrop aria-hidden="true"></div>
+
+    <div
+      class="ac-app-popup"
+      data-ac-popup
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="ac-app-title-{{ section.id }}"
+    >
+      <button type="button" class="ac-app-close" data-ac-close aria-label="Cerrar">&times;</button>
+
+      {%- if section.settings.badge != blank -%}
+        <span class="ac-app-badge">{{ section.settings.badge }}</span>
+      {%- endif -%}
+
+      <h2 class="ac-app-title" id="ac-app-title-{{ section.id }}">
+        {{ section.settings.title }}
+      </h2>
+
+      {%- if section.settings.description != blank -%}
+        <p class="ac-app-text">{{ section.settings.description }}</p>
+      {%- endif -%}
+
+      <div class="ac-app-preview">
+        {%- if section.settings.app_icon != blank -%}
+          <img
+            src="{{ section.settings.app_icon | image_url: width: 120 }}"
+            alt="{{ section.settings.app_name | escape }}"
+            width="52"
+            height="52"
+            loading="lazy"
+          >
+        {%- else -%}
+          <img
+            src="{{ ac_app_url }}icons/icon-192.png"
+            alt="{{ section.settings.app_name | escape }}"
+            width="52"
+            height="52"
+            loading="lazy"
+          >
+        {%- endif -%}
+        <div>
+          <strong>{{ section.settings.app_name }}</strong>
+          <span>{{ section.settings.app_subtitle }}</span>
+        </div>
+      </div>
+
+      <button type="button" class="ac-app-download" data-ac-download>
+        {{ section.settings.button_download }}
+      </button>
+      <button type="button" class="ac-app-later" data-ac-later>
+        {{ section.settings.button_later }}
+      </button>
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .ac-app-section {
+    display: block;
+  }
+
+  .ac-app-section[hidden] {
+    display: block !important;
+  }
+
+  .ac-app-section .ac-app-popup-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.72);
+    z-index: 99998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .ac-app-section .ac-app-popup-backdrop.is-visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .ac-app-section .ac-app-popup {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translate(-50%, 110%);
+    width: min(92vw, 380px);
+    background: #1a1a1a;
+    color: #f5f5f5;
+    border-radius: 20px 20px 0 0;
+    padding: 20px 18px 28px;
+    z-index: 99999;
+    border: 1px solid #2a2a2a;
+    box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.5);
+    transition: transform 0.35s ease;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  .ac-app-section .ac-app-popup.is-visible {
+    transform: translate(-50%, 0);
+  }
+
+  .ac-app-section .ac-app-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: transparent;
+    border: 0;
+    color: #888;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .ac-app-section .ac-app-badge {
+    display: inline-block;
+    background: #c9a962;
+    color: #1a1a1a;
+    font-weight: 800;
+    font-size: 13px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  .ac-app-section .ac-app-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: #e8d5a3;
+    padding-right: 24px;
+  }
+
+  .ac-app-section .ac-app-text {
+    font-size: 14px;
+    line-height: 1.45;
+    color: #a0a0a0;
+    margin: 0 0 16px;
+  }
+
+  .ac-app-section .ac-app-preview {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: #0f0f0f;
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 16px;
+    border: 1px solid #2a2a2a;
+  }
+
+  .ac-app-section .ac-app-preview img {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    object-fit: cover;
+    background: #111;
+    flex-shrink: 0;
+  }
+
+  .ac-app-section .ac-app-preview strong {
+    display: block;
+    font-size: 13px;
+    color: #f5f5f5;
+  }
+
+  .ac-app-section .ac-app-preview span {
+    font-size: 12px;
+    color: #888;
+  }
+
+  .ac-app-section .ac-app-download {
+    width: 100%;
+    background: #c9a962;
+    color: #1a1a1a;
+    border: 0;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .ac-app-section .ac-app-download:active {
+    transform: scale(0.98);
+  }
+
+  .ac-app-section .ac-app-later {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    color: #888;
+    padding: 12px;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    var roots = document.querySelectorAll('[data-ac-app-popup]');
+    if (!roots.length) return;
+
+    roots.forEach(function (root) {
+      if (root.dataset.initialized === 'true') return;
+      root.dataset.initialized = 'true';
+
+      var delay = parseInt(root.dataset.delay, 10) || 3500;
+      var appUrl = root.dataset.appUrl || '';
+      if (appUrl && appUrl.charAt(appUrl.length - 1) !== '/') appUrl += '/';
+      var mobileOnly = root.dataset.mobileOnly !== 'false';
+      var storageKey = root.dataset.storageKey || 'artcuadros_app_popup';
+
+      var backdrop = root.querySelector('[data-ac-backdrop]');
+      var popup = root.querySelector('[data-ac-popup]');
+      var downloadBtn = root.querySelector('[data-ac-download]');
+      var laterBtn = root.querySelector('[data-ac-later]');
+      var closeBtn = root.querySelector('[data-ac-close]');
+
+      if (!backdrop || !popup) return;
+
+      if (localStorage.getItem(storageKey) === '1') return;
+      if (window.matchMedia('(display-mode: standalone)').matches) return;
+
+      var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+      if (mobileOnly && !isMobile) return;
+
+      function closePopup(remember) {
+        backdrop.classList.remove('is-visible');
+        popup.classList.remove('is-visible');
+        if (remember) localStorage.setItem(storageKey, '1');
+      }
+
+      function openPopup() {
+        root.removeAttribute('hidden');
+        requestAnimationFrame(function () {
+          backdrop.classList.add('is-visible');
+          popup.classList.add('is-visible');
+        });
+      }
+
+      function openAppInstall() {
+        localStorage.setItem(storageKey, '1');
+        var url = appUrl.indexOf('?') > -1 ? appUrl + '&install=1' : appUrl + '?install=1';
+        window.location.href = url;
+      }
+
+      if (closeBtn) closeBtn.addEventListener('click', function () { closePopup(true); });
+      if (laterBtn) laterBtn.addEventListener('click', function () { closePopup(true); });
+      if (downloadBtn) downloadBtn.addEventListener('click', openAppInstall);
+      backdrop.addEventListener('click', function () { closePopup(true); });
+
+      setTimeout(openPopup, delay);
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "App móvil Art Cuadros",
+  "tag": "section",
+  "class": "section-ac-app-popup",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Activación"
+    },
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Activar popup de la app",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_only",
+      "label": "Mostrar solo en móvil",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "delay_seconds",
+      "label": "Segundos antes de mostrar",
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Textos del popup"
+    },
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Etiqueta descuento",
+      "default": "-20% APP"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "Prueba nuestra app móvil"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Descripción",
+      "default": "Descarga Art Cuadros en tu teléfono, mira todos los cuadros y compra directo al pago con un 20% de descuento."
+    },
+    {
+      "type": "text",
+      "id": "app_name",
+      "label": "Nombre de la app",
+      "default": "Art Cuadros App"
+    },
+    {
+      "type": "text",
+      "id": "app_subtitle",
+      "label": "Subtítulo de la app",
+      "default": "Catálogo + pago directo"
+    },
+    {
+      "type": "text",
+      "id": "button_download",
+      "label": "Texto botón descargar",
+      "default": "Descargar app en mi móvil"
+    },
+    {
+      "type": "text",
+      "id": "button_later",
+      "label": "Texto botón cerrar",
+      "default": "Ahora no"
+    },
+    {
+      "type": "header",
+      "content": "App y icono"
+    },
+    {
+      "type": "text",
+      "id": "app_url",
+      "label": "URL de la app móvil",
+      "default": "https://sergioivorra.github.io/APP-ARTCUADROS-MOVIL/",
+      "info": "URL completa donde está publicada la app PWA."
+    },
+    {
+      "type": "image_picker",
+      "id": "app_icon",
+      "label": "Icono personalizado (opcional)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "App móvil Art Cuadros"
+    }
+  ]
+}
+{% endschema %}
