@@ -1,5 +1,7 @@
 const SHOP_URL = 'https://artcuadros.com';
 const PRODUCTS_API = `${SHOP_URL}/collections/all/products.json`;
+const DISCOUNT_CODE = '20%-art';
+const DISCOUNT_RATE = 0.2;
 
 const grid = document.getElementById('products-grid');
 const loading = document.getElementById('loading');
@@ -7,6 +9,9 @@ const errorEl = document.getElementById('error');
 const countEl = document.getElementById('product-count');
 const retryBtn = document.getElementById('retry-btn');
 const installBtn = document.getElementById('install-btn');
+const appCatalog = document.getElementById('app-catalog');
+const appLocked = document.getElementById('app-locked');
+const installLockedBtn = document.getElementById('install-locked-btn');
 
 const sheetBackdrop = document.getElementById('sheet-backdrop');
 const variantSheet = document.getElementById('variant-sheet');
@@ -31,6 +36,25 @@ let deferredPrompt = null;
 let activeProduct = null;
 let activeSelections = {};
 
+function formatPrice(price) {
+  return `${parseFloat(price).toLocaleString('es-ES', { minimumFractionDigits: 2 })} €`;
+}
+
+function getDiscountedPrice(price) {
+  return parseFloat(price) * (1 - DISCOUNT_RATE);
+}
+
+function appendDiscountedPrice(container, originalPrice) {
+  const original = parseFloat(originalPrice);
+  const discounted = getDiscountedPrice(original);
+  container.textContent = formatPrice(discounted);
+
+  const compareSpan = document.createElement('span');
+  compareSpan.className = 'compare';
+  compareSpan.textContent = formatPrice(original);
+  container.appendChild(compareSpan);
+}
+
 async function fetchAllProducts() {
   const allProducts = [];
   let page = 1;
@@ -51,10 +75,6 @@ async function fetchAllProducts() {
   return allProducts;
 }
 
-function formatPrice(price) {
-  return `${parseFloat(price).toLocaleString('es-ES', { minimumFractionDigits: 2 })} €`;
-}
-
 function getAvailableVariants(product) {
   return product.variants.filter((v) => v.available);
 }
@@ -64,14 +84,6 @@ function getLowestPrice(product) {
   const variants = available.length ? available : product.variants;
   const prices = variants.map((v) => parseFloat(v.price));
   return Math.min(...prices);
-}
-
-function getComparePrice(product) {
-  const comparePrices = product.variants
-    .map((v) => v.compare_at_price)
-    .filter(Boolean)
-    .map((p) => parseFloat(p));
-  return comparePrices.length ? Math.min(...comparePrices) : null;
 }
 
 function isSoldOut(product) {
@@ -118,7 +130,9 @@ function goToCheckout(variantId) {
   checkoutOverlay.classList.remove('hidden');
   closeVariantSheet();
 
-  window.location.assign(`${SHOP_URL}/cart/${variantId}:1?checkout`);
+  const code = encodeURIComponent(DISCOUNT_CODE);
+  const redirect = encodeURIComponent(`/cart/${variantId}:1?checkout`);
+  window.location.assign(`${SHOP_URL}/discount/${code}?redirect=${redirect}`);
 }
 
 function handleProductTap(product) {
@@ -213,7 +227,9 @@ function renderSheetOptions() {
 
 function updateSheetPrice() {
   const variant = findVariantBySelections(activeProduct, activeSelections);
-  sheetPrice.textContent = variant ? formatPrice(variant.price) : '—';
+  sheetPrice.innerHTML = '';
+  if (variant) appendDiscountedPrice(sheetPrice, variant.price);
+  else sheetPrice.textContent = '—';
   sheetBuy.disabled = !variant;
 }
 
@@ -253,6 +269,14 @@ function createProductCard(product) {
     imageWrap.appendChild(badge);
   }
 
+  const discountBadge = document.createElement('span');
+  discountBadge.className = 'product-badge new';
+  discountBadge.textContent = '-20%';
+  discountBadge.style.top = 'auto';
+  discountBadge.style.bottom = '8px';
+  discountBadge.style.left = '8px';
+  if (!soldOut) imageWrap.appendChild(discountBadge);
+
   const info = document.createElement('div');
   info.className = 'product-info';
 
@@ -262,15 +286,7 @@ function createProductCard(product) {
 
   const price = document.createElement('p');
   price.className = 'product-price';
-  price.textContent = formatPrice(getLowestPrice(product));
-
-  const compare = getComparePrice(product);
-  if (compare) {
-    const compareSpan = document.createElement('span');
-    compareSpan.className = 'compare';
-    compareSpan.textContent = formatPrice(compare);
-    price.appendChild(compareSpan);
-  }
+  appendDiscountedPrice(price, getLowestPrice(product));
 
   info.appendChild(title);
   info.appendChild(price);
@@ -286,7 +302,7 @@ function renderProducts(products) {
     grid.appendChild(createProductCard(product));
   });
 
-  countEl.textContent = `${products.length} cuadros`;
+  countEl.textContent = `${products.length} cuadros · -20% app`;
   countEl.classList.remove('hidden');
 }
 
@@ -315,14 +331,16 @@ function hideAppSplash() {
   setTimeout(() => appSplash.remove(), 500);
 }
 
-sheetBuy.addEventListener('click', () => {
-  if (!activeProduct) return;
-  const variant = findVariantBySelections(activeProduct, activeSelections);
-  if (variant) goToCheckout(variant.id);
-});
+function showLockedView() {
+  document.body.classList.add('app-locked');
+  appLocked?.classList.remove('hidden');
+}
 
-sheetClose.addEventListener('click', closeVariantSheet);
-sheetBackdrop.addEventListener('click', closeVariantSheet);
+function unlockApp() {
+  document.body.classList.remove('app-locked');
+  appLocked?.classList.add('hidden');
+  loadProducts();
+}
 
 function showInstallBanner() {
   if (isStandalone) return;
@@ -337,15 +355,25 @@ function hideInstallBanner() {
 async function triggerInstall() {
   if (deferredPrompt) {
     deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
+    const result = await deferredPrompt.userChoice;
     deferredPrompt = null;
     installBtn.classList.add('hidden');
     hideInstallBanner();
+    if (result.outcome === 'accepted') unlockApp();
     return;
   }
 
-  if (isIos) showInstallBanner();
+  showInstallBanner();
 }
+
+sheetBuy.addEventListener('click', () => {
+  if (!activeProduct) return;
+  const variant = findVariantBySelections(activeProduct, activeSelections);
+  if (variant) goToCheckout(variant.id);
+});
+
+sheetClose.addEventListener('click', closeVariantSheet);
+sheetBackdrop.addEventListener('click', closeVariantSheet);
 
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
@@ -359,32 +387,27 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 installBtn.addEventListener('click', triggerInstall);
 installBannerBtn.addEventListener('click', triggerInstall);
+installLockedBtn?.addEventListener('click', triggerInstall);
 installBannerSkip.addEventListener('click', hideInstallBanner);
 
 window.addEventListener('appinstalled', () => {
   installBtn.classList.add('hidden');
   deferredPrompt = null;
   hideInstallBanner();
-});
-
-if (wantsInstall && !isStandalone) {
-  showInstallBanner();
-}
-
-retryBtn.addEventListener('click', loadProducts);
-
-document.querySelectorAll('a').forEach((link) => {
-  link.addEventListener('click', (e) => {
-    if (link.target === '_blank') {
-      e.preventDefault();
-      window.location.assign(link.href);
-    }
-  });
+  unlockApp();
 });
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(console.error);
 }
 
-loadProducts();
+if (isStandalone) {
+  unlockApp();
+} else {
+  showLockedView();
+  hideAppSplash();
+  if (wantsInstall) showInstallBanner();
+}
+
+retryBtn.addEventListener('click', loadProducts);
 setTimeout(hideAppSplash, 2500);

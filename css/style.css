@@ -84,6 +84,44 @@ body {
   pointer-events: none;
 }
 
+.app-locked-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px;
+  min-height: 50dvh;
+  gap: 16px;
+}
+
+.app-locked-screen.hidden {
+  display: none !important;
+}
+
+.app-locked-logo {
+  width: min(36vw, 120px);
+  height: min(36vw, 120px);
+  object-fit: contain;
+}
+
+.app-locked-screen h2 {
+  font-size: 20px;
+  color: var(--gold-light);
+}
+
+.app-locked-screen p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  max-width: 320px;
+}
+
+body.app-locked #app-catalog,
+body.app-locked .promo-banner {
+  display: none !important;
+}
+
 .install-btn {
   background: var(--gold);
   color: #1a1a1a;

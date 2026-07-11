@@ -39,28 +39,24 @@
         <p class="ac-app-text">{{ section.settings.description }}</p>
       {% endif %}
 
-      <div class="ac-app-preview">
+      <div class="ac-app-preview ac-app-preview-simple">
         {% if section.settings.app_icon != blank %}
           <img
             src="{{ section.settings.app_icon | image_url: width: 120 }}"
             alt="{{ section.settings.app_name | escape }}"
-            width="52"
-            height="52"
+            width="64"
+            height="64"
             loading="lazy"
           >
         {% else %}
           <img
-            src="{{ 'app-movil-icon-192.png' | asset_url }}"
+            src="{{ ac_app_url }}icons/icon-192.png"
             alt="{{ section.settings.app_name | escape }}"
-            width="52"
-            height="52"
+            width="64"
+            height="64"
             loading="lazy"
           >
         {% endif %}
-        <div>
-          <strong>{{ section.settings.app_name }}</strong>
-          <span>{{ section.settings.app_subtitle }}</span>
-        </div>
       </div>
 
       <button type="button" class="ac-app-download" data-ac-download>
@@ -154,6 +150,17 @@
       line-height: 1.45;
       color: #a0a0a0;
       margin: 0 0 16px;
+    }
+
+    #ac-app-section-{{ section.id }} .ac-app-preview-simple {
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    #ac-app-section-{{ section.id }} .ac-app-preview-simple img {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
     }
 
     #ac-app-section-{{ section.id }} .ac-app-preview {
@@ -317,7 +324,7 @@
       "type": "textarea",
       "id": "description",
       "label": "Descripción",
-      "default": "Descarga Art Cuadros en tu teléfono, mira todos los cuadros y compra directo al pago con un 20% de descuento."
+      "default": "Descarga la app y obtén un 20% de descuento en todos los cuadros. El catálogo solo se ve dentro de la app instalada."
     },
     {
       "type": "text",
