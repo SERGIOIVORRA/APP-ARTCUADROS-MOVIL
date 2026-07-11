@@ -14,7 +14,6 @@
     data-delay="{{ section.settings.delay_seconds | times: 1000 }}"
     data-app-url="{{ ac_app_url | escape }}"
     data-mobile-only="{{ section.settings.mobile_only }}"
-    data-storage-key="artcuadros_app_popup_{{ section.id }}"
     hidden
   >
     <div class="ac-app-popup-backdrop" data-ac-backdrop aria-hidden="true"></div>
@@ -230,7 +229,6 @@
       var appUrl = root.dataset.appUrl || '';
       if (appUrl && appUrl.charAt(appUrl.length - 1) !== '/') appUrl += '/';
       var mobileOnly = root.dataset.mobileOnly !== 'false';
-      var storageKey = root.dataset.storageKey || 'artcuadros_app_popup';
 
       var backdrop = root.querySelector('[data-ac-backdrop]');
       var popup = root.querySelector('[data-ac-popup]');
@@ -240,16 +238,14 @@
 
       if (!backdrop || !popup) return;
 
-      if (localStorage.getItem(storageKey) === '1') return;
       if (window.matchMedia('(display-mode: standalone)').matches) return;
 
       var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
       if (mobileOnly && !isMobile) return;
 
-      function closePopup(remember) {
+      function closePopup() {
         backdrop.classList.remove('is-visible');
         popup.classList.remove('is-visible');
-        if (remember) localStorage.setItem(storageKey, '1');
       }
 
       function openPopup() {
@@ -261,15 +257,14 @@
       }
 
       function openAppInstall() {
-        localStorage.setItem(storageKey, '1');
         var url = appUrl.indexOf('?') > -1 ? appUrl + '&install=1' : appUrl + '?install=1';
         window.location.href = url;
       }
 
-      if (closeBtn) closeBtn.addEventListener('click', function () { closePopup(true); });
-      if (laterBtn) laterBtn.addEventListener('click', function () { closePopup(true); });
+      if (closeBtn) closeBtn.addEventListener('click', closePopup);
+      if (laterBtn) laterBtn.addEventListener('click', closePopup);
       if (downloadBtn) downloadBtn.addEventListener('click', openAppInstall);
-      backdrop.addEventListener('click', function () { closePopup(true); });
+      backdrop.addEventListener('click', closePopup);
 
       setTimeout(openPopup, delay);
     });
