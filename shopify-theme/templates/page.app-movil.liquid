@@ -1,0 +1,104 @@
+{% layout none %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Catálogo de cuadros Art Cuadros. Compra desde la app y obtén un 20% de descuento.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Art Cuadros">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <title>Art Cuadros App</title>
+
+  <link rel="manifest" href="{{ 'app-movil.webmanifest.liquid' | asset_url }}">
+  <link rel="icon" type="image/png" href="{{ 'app-movil-icon-192.png' | asset_url }}">
+  <link rel="apple-touch-icon" href="{{ 'app-movil-icon-192.png' | asset_url }}">
+  {{ 'app-movil.css' | asset_url | stylesheet_tag }}
+</head>
+<body>
+  <div id="app-splash" class="app-splash" aria-hidden="false">
+    <img src="{{ 'app-movil-splash.png' | asset_url }}" alt="Art Cuadros" width="160" height="160">
+  </div>
+
+  <header class="header">
+    <div class="header-inner">
+      <img src="{{ 'app-movil-logo.png' | asset_url }}" alt="Art Cuadros" class="logo" width="40" height="40">
+      <button id="install-btn" class="install-btn hidden" type="button">Instalar app</button>
+    </div>
+  </header>
+
+  <section class="promo-banner" aria-label="Oferta especial">
+    <div class="promo-content">
+      <span class="promo-badge">-20%</span>
+      <div class="promo-text">
+        <strong>Compra desde la app</strong>
+        <span>y obtén un 20% de descuento</span>
+      </div>
+    </div>
+  </section>
+
+  <main class="main">
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Cargando cuadros...</p>
+    </div>
+
+    <div id="error" class="error hidden">
+      <p>No se pudieron cargar los productos.</p>
+      <button type="button" id="retry-btn">Reintentar</button>
+    </div>
+
+    <p id="product-count" class="product-count hidden"></p>
+    <div id="products-grid" class="products-grid"></div>
+  </main>
+
+  <footer class="footer">
+    <span>Art Cuadros · App móvil</span>
+  </footer>
+
+  <div id="sheet-backdrop" class="sheet-backdrop hidden" aria-hidden="true"></div>
+
+  <aside id="variant-sheet" class="variant-sheet hidden" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-header">
+      <img id="sheet-image" class="sheet-image" alt="">
+      <div class="sheet-header-text">
+        <h2 id="sheet-title"></h2>
+        <p id="sheet-price" class="sheet-price"></p>
+      </div>
+    </div>
+    <div id="sheet-options" class="sheet-options"></div>
+    <button id="sheet-buy" type="button" class="buy-btn">Ir a pagar ahora</button>
+    <button id="sheet-close" type="button" class="sheet-close">Cancelar</button>
+  </aside>
+
+  <div id="checkout-overlay" class="checkout-overlay hidden" aria-live="polite">
+    <div class="spinner"></div>
+    <p>Abriendo pago seguro de Shopify...</p>
+  </div>
+
+  <div id="install-banner" class="install-banner hidden" role="dialog" aria-modal="true">
+    <div class="install-banner-inner">
+      <img src="{{ 'app-movil-splash.png' | asset_url }}" alt="Art Cuadros" class="install-banner-icon">
+      <h2>Instala Art Cuadros</h2>
+      <p>Toca el botón de abajo para instalar la app en tu móvil.</p>
+      <button id="install-banner-btn" type="button" class="buy-btn">Instalar en mi móvil</button>
+      <p id="install-android-help" class="install-ios-help hidden">
+        Si no aparece el botón: pulsa <strong>⋮</strong> (arriba derecha) → <strong>Instalar aplicación</strong> o <strong>Añadir a pantalla de inicio</strong>
+      </p>
+      <p id="install-ios-help" class="install-ios-help hidden">
+        En iPhone: pulsa <strong>Compartir</strong> → <strong>Añadir a pantalla de inicio</strong>
+      </p>
+      <button id="install-banner-skip" type="button" class="sheet-close">Continuar sin instalar</button>
+    </div>
+  </div>
+
+  <script>
+    window.AC_SHOP_URL = {{ shop.url | json }};
+  </script>
+  <script src="{{ 'app-movil.js' | asset_url }}" defer></script>
+</body>
+</html>

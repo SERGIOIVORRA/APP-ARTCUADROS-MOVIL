@@ -1,0 +1,26 @@
+{
+  "name": "Art Cuadros",
+  "short_name": "Art Cuadros",
+  "description": "Catálogo de cuadros Art Cuadros. Compra desde la app.",
+  "start_url": "{{ shop.url }}/pages/app-movil",
+  "scope": "{{ shop.url }}/pages/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "{{ 'app-movil-icon-192.png' | asset_img_url: width: 192 | prepend: 'https:' }}",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "{{ 'app-movil-icon-512.png' | asset_img_url: width: 512 | prepend: 'https:' }}",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

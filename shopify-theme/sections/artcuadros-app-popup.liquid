@@ -1,7 +1,7 @@
 {% if section.settings.enabled %}
   {% assign ac_app_url = section.settings.app_url | strip %}
   {% if ac_app_url == blank %}
-    {% assign ac_app_url = 'https://sergioivorra.github.io/APP-ARTCUADROS-MOVIL/' %}
+    {% assign ac_app_url = shop.url | append: '/pages/app-movil' %}
   {% endif %}
   {% unless ac_app_url contains '://' %}
     {% assign ac_app_url = 'https://' | append: ac_app_url %}
@@ -50,7 +50,7 @@
           >
         {% else %}
           <img
-            src="{{ ac_app_url }}icons/icon-192.png"
+            src="{{ 'app-movil-icon-192.png' | asset_url }}"
             alt="{{ section.settings.app_name | escape }}"
             width="52"
             height="52"
@@ -351,8 +351,8 @@
       "type": "text",
       "id": "app_url",
       "label": "URL de la app móvil",
-      "default": "https://sergioivorra.github.io/APP-ARTCUADROS-MOVIL/",
-      "info": "URL completa donde está publicada la app PWA."
+      "default": "https://artcuadros.com/pages/app-movil",
+      "info": "URL de la página de la app en tu tienda. Ejemplo: https://tutienda.com/pages/app-movil"
     },
     {
       "type": "image_picker",
