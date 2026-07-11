@@ -5,7 +5,8 @@
   "scripts": {
     "start": "npx serve . -l tcp://0.0.0.0:8080",
     "icons": "node scripts/generate-icons.js",
-    "deploy:prepare": "node scripts/prepare-deploy.js"
+    "deploy:prepare": "node scripts/prepare-deploy.js",
+    "deploy:github": "node scripts/deploy-gh-pages.js"
   },
   "devDependencies": {
     "sharp": "^0.33.5"
