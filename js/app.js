@@ -1,7 +1,7 @@
 const SHOP_URL = 'https://artcuadros.com';
 const PRODUCTS_API = `${SHOP_URL}/collections/all/products.json`;
-const DISCOUNT_CODE = '20%-art';
-const DISCOUNT_RATE = 0.2;
+const DISCOUNT_CODE = '5%-art';
+const DISCOUNT_RATE = 0.05;
 
 const grid = document.getElementById('products-grid');
 const loading = document.getElementById('loading');
@@ -271,7 +271,7 @@ function createProductCard(product) {
 
   const discountBadge = document.createElement('span');
   discountBadge.className = 'product-badge new';
-  discountBadge.textContent = '-20%';
+  discountBadge.textContent = '-5%';
   discountBadge.style.top = 'auto';
   discountBadge.style.bottom = '8px';
   discountBadge.style.left = '8px';
@@ -302,7 +302,7 @@ function renderProducts(products) {
     grid.appendChild(createProductCard(product));
   });
 
-  countEl.textContent = `${products.length} cuadros · -20% app`;
+  countEl.textContent = `${products.length} cuadros · -5% app`;
   countEl.classList.remove('hidden');
 }
 
