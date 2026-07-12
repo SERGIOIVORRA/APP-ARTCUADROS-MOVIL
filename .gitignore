@@ -1,2 +1,8 @@
 node_modules/
 .gh-pages-deploy/
+android/android.keystore
+android/app/build/
+android/.gradle/
+android/local.properties
+android/*.aab
+android/*.apk

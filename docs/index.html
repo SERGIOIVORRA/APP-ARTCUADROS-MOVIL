@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="Catálogo de cuadros Art Cuadros. Compra desde la app y obtén un 20% de descuento.">
+  <meta name="description" content="Catálogo de cuadros Art Cuadros. Compra desde la app y obtén un 5% de descuento.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Art Cuadros">
@@ -33,15 +33,22 @@
 
   <section class="promo-banner" aria-label="Oferta especial">
     <div class="promo-content">
-      <span class="promo-badge">-20%</span>
+      <span class="promo-badge">-5%</span>
       <div class="promo-text">
-        <strong>Compra desde la app</strong>
-        <span>y obtén un 20% de descuento</span>
+        <strong>5% en todos los productos comprados desde la app</strong>
+        <span>Código automático al pagar: 5%-art</span>
       </div>
     </div>
   </section>
 
-  <main class="main">
+  <div id="app-locked" class="app-locked-screen hidden">
+    <img src="icons/splash-logo.png" alt="Art Cuadros" class="app-locked-logo" width="120" height="120">
+    <h2>Instala la app para ver el catálogo</h2>
+    <p>Descarga Art Cuadros en tu móvil y obtén un <strong>5% de descuento</strong> en todos los cuadros.</p>
+    <button id="install-locked-btn" type="button" class="buy-btn">Instalar app en mi móvil</button>
+  </div>
+
+  <main class="main" id="app-catalog">
     <div id="loading" class="loading">
       <div class="spinner"></div>
       <p>Cargando cuadros...</p>
@@ -85,7 +92,7 @@
     <div class="install-banner-inner">
       <img src="icons/splash-logo.png" alt="Art Cuadros" class="install-banner-icon">
       <h2>Instala Art Cuadros</h2>
-      <p>Toca <strong>Instalar</strong> para tener la app en tu móvil con acceso directo al catálogo y pago.</p>
+      <p>Instala la app en tu móvil y consigue un <strong>5% de descuento</strong> en todos los productos con el código <strong>5%-art</strong>.</p>
       <button id="install-banner-btn" type="button" class="buy-btn">Instalar en mi móvil</button>
       <p id="install-ios-help" class="install-ios-help hidden">En iPhone: pulsa <strong>Compartir</strong> → <strong>Añadir a pantalla de inicio</strong></p>
       <button id="install-banner-skip" type="button" class="sheet-close">Continuar sin instalar</button>

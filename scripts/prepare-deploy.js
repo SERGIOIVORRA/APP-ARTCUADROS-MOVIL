@@ -4,8 +4,8 @@ const path = require('path');
 const root = path.join(__dirname, '..');
 const out = path.join(root, 'docs');
 
-const files = ['index.html', 'manifest.webmanifest', 'sw.js', '.nojekyll'];
-const dirs = ['css', 'js', 'icons'];
+const files = ['index.html', 'manifest.webmanifest', 'sw.js', '.nojekyll', 'politica-privacidad.html'];
+const dirs = ['css', 'js', 'icons', '.well-known'];
 
 function copyFile(src, dest) {
   fs.mkdirSync(path.dirname(dest), { recursive: true });

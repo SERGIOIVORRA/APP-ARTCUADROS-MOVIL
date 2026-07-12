@@ -6,9 +6,13 @@
     "start": "npx serve . -l tcp://0.0.0.0:8080",
     "icons": "node scripts/generate-icons.js",
     "deploy:prepare": "node scripts/prepare-deploy.js",
-    "deploy:github": "node scripts/deploy-gh-pages.js"
+    "deploy:github": "node scripts/deploy-gh-pages.js",
+    "android:init": "node scripts/setup-android.js",
+    "android:build": "node scripts/build-android.js",
+    "android:fingerprint": "node scripts/print-fingerprint.js"
   },
   "devDependencies": {
+    "@bubblewrap/cli": "^1.21.0",
     "sharp": "^0.33.5"
   }
 }
