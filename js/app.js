@@ -30,6 +30,7 @@ const appSplash = document.getElementById('app-splash');
 
 const urlParams = new URLSearchParams(window.location.search);
 const wantsInstall = urlParams.get('install') === '1';
+const wantsPreview = urlParams.get('preview') === '1';
 const isIos = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
 let deferredPrompt = null;
@@ -398,7 +399,7 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(console.error);
 }
 
-if (isStandalone) {
+if (isStandalone || wantsPreview) {
   unlockApp();
 } else {
   showLockedView();

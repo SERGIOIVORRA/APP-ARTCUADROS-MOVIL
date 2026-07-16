@@ -1,9 +1,9 @@
-const CACHE_NAME = 'artcuadros-v6';
+const CACHE_NAME = 'artcuadros-v7';
 const STATIC_ASSETS = [
   './',
   './index.html',
-  './css/style.css',
-  './js/app.js',
+  './css/style.css?v=7',
+  './js/app.js?v=7',
   './manifest.webmanifest',
   './icons/logo-artcuadros.png',
   './icons/splash-logo.png',
@@ -14,7 +14,7 @@ const STATIC_ASSETS = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS).catch(() => undefined))
   );
   self.skipWaiting();
 });
@@ -23,17 +23,18 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
-    )
+    ).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
   const { request } = event;
-
   if (request.method !== 'GET') return;
 
-  if (request.url.includes('artcuadros.com') && request.url.includes('.json')) {
+  const url = request.url;
+
+  // Productos: red primero
+  if (url.includes('artcuadros.com') && url.includes('.json')) {
     event.respondWith(
       fetch(request)
         .then((response) => {
@@ -46,7 +47,29 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  if (request.url.startsWith(self.location.origin)) {
+  // HTML/JS/CSS: red primero para ver cambios al instante
+  if (
+    request.mode === 'navigate' ||
+    url.includes('/js/') ||
+    url.includes('/css/') ||
+    url.endsWith('.html') ||
+    url.endsWith('sw.js')
+  ) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request))
+    );
+    return;
+  }
+
+  if (url.startsWith(self.location.origin)) {
     event.respondWith(
       caches.match(request).then((cached) => {
         if (cached) return cached;
