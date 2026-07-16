@@ -8,20 +8,20 @@ on:
 permissions:
   contents: write
 
-concurrency:
-  group: gh-pages
-  cancel-in-progress: false
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Preparar archivos de la app
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Preparar sitio
         run: node scripts/prepare-deploy.js
 
-      - name: Publicar en gh-pages
+      - name: Publicar rama gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

@@ -231,6 +231,7 @@ function updateSheetPrice() {
 
 function createProductCard(product) {
   const soldOut = isSoldOut(product);
+  const coverImage = product.images[1] || product.images[0] || null;
   const card = document.createElement('button');
   card.type = 'button';
   card.className = `product-card${soldOut ? ' disabled' : ''}`;
@@ -245,9 +246,9 @@ function createProductCard(product) {
   img.className = 'product-image';
   img.alt = product.title;
   img.loading = 'lazy';
-  img.src = product.images[0]?.src || '';
-  img.srcset = product.images[0]
-    ? `${product.images[0].src}&width=300 300w, ${product.images[0].src}&width=600 600w`
+  img.src = coverImage?.src || '';
+  img.srcset = coverImage
+    ? `${coverImage.src}&width=300 300w, ${coverImage.src}&width=600 600w`
     : '';
   img.sizes = '(max-width: 480px) 45vw, 300px';
 
