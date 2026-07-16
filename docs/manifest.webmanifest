@@ -2,6 +2,7 @@
   "name": "Art Cuadros - Cuadros Online",
   "short_name": "Art Cuadros",
   "description": "Catálogo de cuadros Art Cuadros. Compra desde la app y obtén un 5% de descuento.",
+  "id": "/APP-ARTCUADROS-MOVIL/",
   "start_url": "/APP-ARTCUADROS-MOVIL/",
   "scope": "/APP-ARTCUADROS-MOVIL/",
   "display": "standalone",

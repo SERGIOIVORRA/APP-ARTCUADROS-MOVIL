@@ -141,12 +141,8 @@ function handleProductTap(product) {
   const available = getAvailableVariants(product);
   if (available.length === 0) return;
 
-  if (available.length === 1) {
-    goToCheckout(available[0].id);
-    return;
-  }
-
-  openVariantSheet(product);
+  // Siempre compra la primera variante disponible (sin selector)
+  goToCheckout(available[0].id);
 }
 
 function openVariantSheet(product) {
