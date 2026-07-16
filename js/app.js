@@ -399,12 +399,11 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(console.error);
 }
 
-if (isStandalone || wantsPreview) {
-  unlockApp();
-} else {
-  showLockedView();
-  hideAppSplash();
-  if (wantsInstall) showInstallBanner();
+// Siempre mostrar el catálogo (igual que en la app instalada).
+// La pantalla de bloqueo NO se usa: solo el botón/banner de instalar.
+unlockApp();
+if (wantsInstall && !isStandalone) {
+  showInstallBanner();
 }
 
 retryBtn.addEventListener('click', loadProducts);
