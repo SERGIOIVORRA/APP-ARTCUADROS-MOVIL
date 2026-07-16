@@ -127,12 +127,8 @@ function handleProductTap(product) {
   const available = getAvailableVariants(product);
   if (available.length === 0) return;
 
-  if (available.length === 1) {
-    goToCheckout(available[0].id);
-    return;
-  }
-
-  openVariantSheet(product);
+  // Sin selector: ir siempre a la primera variante disponible.
+  goToCheckout(available[0].id);
 }
 
 function openVariantSheet(product) {
