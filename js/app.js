@@ -10,8 +10,8 @@ const countEl = document.getElementById('product-count');
 const retryBtn = document.getElementById('retry-btn');
 const installBtn = document.getElementById('install-btn');
 const appCatalog = document.getElementById('app-catalog');
-const appLocked = document.getElementById('app-locked');
-const installLockedBtn = document.getElementById('install-locked-btn');
+const appLocked = null;
+const installLockedBtn = null;
 
 const sheetBackdrop = document.getElementById('sheet-backdrop');
 const variantSheet = document.getElementById('variant-sheet');
@@ -330,13 +330,11 @@ function hideAppSplash() {
 }
 
 function showLockedView() {
-  document.body.classList.add('app-locked');
-  appLocked?.classList.remove('hidden');
+  // Pantalla de bloqueo eliminada: el catálogo siempre es visible.
 }
 
 function unlockApp() {
   document.body.classList.remove('app-locked');
-  appLocked?.classList.add('hidden');
   loadProducts();
 }
 
@@ -385,7 +383,6 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 installBtn.addEventListener('click', triggerInstall);
 installBannerBtn.addEventListener('click', triggerInstall);
-installLockedBtn?.addEventListener('click', triggerInstall);
 installBannerSkip.addEventListener('click', hideInstallBanner);
 
 window.addEventListener('appinstalled', () => {
@@ -396,15 +393,17 @@ window.addEventListener('appinstalled', () => {
 });
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').catch(console.error);
+  navigator.serviceWorker.getRegistrations().then((regs) => {
+    Promise.all(regs.map((r) => r.update())).finally(() => {
+      navigator.serviceWorker.register('./sw.js?v=8').catch(console.error);
+    });
+  });
 }
 
-// Siempre mostrar el catálogo (igual que en la app instalada).
-// La pantalla de bloqueo NO se usa: solo el botón/banner de instalar.
-unlockApp();
+loadProducts();
 if (wantsInstall && !isStandalone) {
   showInstallBanner();
 }
 
 retryBtn.addEventListener('click', loadProducts);
-setTimeout(hideAppSplash, 2500);
+setTimeout(hideAppSplash, 1200);
