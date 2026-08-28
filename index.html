@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Catálogo de cuadros Art Cuadros. Compra desde la app y obtén un 5% de descuento.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Art Cuadros">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <title>Art Cuadros</title>
+
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="preconnect" href="https://artcuadros.com">
+  <link rel="preconnect" href="https://cdn.shopify.com">
+  <link rel="stylesheet" href="css/style.css?v=10">
+</head>
+<body>
+  <div id="app-splash" class="app-splash" aria-hidden="false">
+    <img src="icons/splash-logo.png" alt="Art Cuadros" width="88" height="88">
+  </div>
+
+  <header class="header">
+    <div class="header-inner">
+      <img src="icons/logo-artcuadros.png" alt="Art Cuadros" class="logo" width="40" height="40">
+      <button id="install-btn" class="install-btn hidden" type="button">Instalar app</button>
+    </div>
+  </header>
+
+  <section class="promo-banner" aria-label="Oferta especial">
+    <div class="promo-content">
+      <span class="promo-badge">-5%</span>
+      <div class="promo-text">
+        <strong>5% en todos los productos comprados desde la app</strong>
+        <span>Código automático al pagar: 5%-art</span>
+      </div>
+    </div>
+  </section>
+
+  <main class="main" id="app-catalog">
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Cargando cuadros...</p>
+    </div>
+
+    <div id="error" class="error hidden">
+      <p>No se pudieron cargar los productos.</p>
+      <button type="button" id="retry-btn">Reintentar</button>
+    </div>
+
+    <p id="product-count" class="product-count hidden"></p>
+    <div id="products-grid" class="products-grid"></div>
+  </main>
+
+  <footer class="footer">
+    <span>Art Cuadros · App móvil</span>
+  </footer>
+
+  <div id="sheet-backdrop" class="sheet-backdrop hidden" aria-hidden="true"></div>
+
+  <aside id="variant-sheet" class="variant-sheet hidden" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-header">
+      <img id="sheet-image" class="sheet-image" alt="">
+      <div class="sheet-header-text">
+        <h2 id="sheet-title"></h2>
+        <p id="sheet-price" class="sheet-price"></p>
+      </div>
+    </div>
+    <div id="sheet-options" class="sheet-options"></div>
+    <button id="sheet-buy" type="button" class="buy-btn">Ir a pagar ahora</button>
+    <button id="sheet-close" type="button" class="sheet-close">Cancelar</button>
+  </aside>
+
+  <div id="checkout-overlay" class="checkout-overlay hidden" aria-live="polite">
+    <div class="spinner"></div>
+    <p>Abriendo el pago seguro de Art Cuadros...</p>
+  </div>
+
+  <div id="install-banner" class="install-banner hidden" role="dialog" aria-modal="true">
+    <div class="install-banner-inner">
+      <img src="icons/splash-logo.png" alt="Art Cuadros" class="install-banner-icon">
+      <h2>Instala Art Cuadros</h2>
+      <p>Instala la app en tu móvil y consigue un <strong>5% de descuento</strong> en todos los productos con el código <strong>5%-art</strong>.</p>
+      <button id="install-banner-btn" type="button" class="buy-btn">Instalar en mi móvil</button>
+      <p id="install-ios-help" class="install-ios-help hidden">En iPhone: pulsa <strong>Compartir</strong> → <strong>Añadir a pantalla de inicio</strong></p>
+      <button id="install-banner-skip" type="button" class="sheet-close">Continuar sin instalar</button>
+    </div>
+  </div>
+
+  <script src="js/app.js?v=9" type="module"></script>
+</body>
+</html>

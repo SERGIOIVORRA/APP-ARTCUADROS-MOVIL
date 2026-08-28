@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.artcuadros.app",
+      "sha256_cert_fingerprints": [
+        "65:BB:F3:60:AF:75:35:EB:37:A9:E1:9C:F0:A0:69:0C:3E:B1:85:F9:9D:37:EA:F2:E0:F1:E7:41:CC:E7:1F:A8",
+        "C5:43:39:D8:5F:C5:01:86:5B:82:E0:0B:6F:81:A0:9D:A9:E1:D5:65:07:5F:AB:84:62:F3:B6:C6:FF:FA:35:08"
+      ]
+    }
+  }
+]
