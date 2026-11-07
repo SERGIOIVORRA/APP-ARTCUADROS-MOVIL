@@ -1,9 +1,9 @@
-const CACHE_NAME = 'artcuadros-v11';
+const CACHE_NAME = 'artcuadros-v12';
 const STATIC_ASSETS = [
   './',
   './index.html',
-  './css/style.css?v=9',
-  './js/app.js?v=9',
+  './css/style.css?v=12',
+  './js/app.js?v=12',
   './manifest.webmanifest',
   './icons/logo-artcuadros.png',
   './icons/splash-logo.png',

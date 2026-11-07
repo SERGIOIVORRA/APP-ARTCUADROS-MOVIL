@@ -4,7 +4,7 @@ const path = require('path');
 const root = path.join(__dirname, '..');
 const out = path.join(root, 'docs');
 
-const files = ['index.html', 'manifest.webmanifest', 'sw.js', '.nojekyll', 'politica-privacidad.html'];
+const files = ['index.html', 'manifest.webmanifest', 'sw.js', '.nojekyll', 'politica-privacidad.html', 'CNAME'];
 const dirs = ['css', 'js', 'icons', '.well-known'];
 
 function copyFile(src, dest) {
@@ -32,5 +32,8 @@ for (const file of files) {
 for (const dir of dirs) {
   copyDir(path.join(root, dir), path.join(out, dir));
 }
+
+// Garantiza el dominio custom aunque el fichero CNAME falle al copiarse.
+fs.writeFileSync(path.join(out, 'CNAME'), 'app.artcuadros.com\n', 'utf8');
 
 console.log('Sitio listo en docs/');
