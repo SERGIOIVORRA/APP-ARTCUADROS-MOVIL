@@ -27,6 +27,12 @@ const installBannerBtn = document.getElementById('install-banner-btn');
 const installBannerSkip = document.getElementById('install-banner-skip');
 const installIosHelp = document.getElementById('install-ios-help');
 const appSplash = document.getElementById('app-splash');
+const appGate = document.getElementById('app-gate');
+const gateForm = document.getElementById('gate-form');
+const gatePassword = document.getElementById('gate-password');
+const gateError = document.getElementById('gate-error');
+const APP_GATE_PASSWORD = 'TREN33';
+const GATE_SESSION_KEY = 'artcuadros_gate_ok';
 
 const urlParams = new URLSearchParams(window.location.search);
 const wantsInstall = urlParams.get('install') === '1';
@@ -309,12 +315,18 @@ async function loadProducts() {
   errorEl.classList.add('hidden');
   grid.innerHTML = '';
   countEl.classList.add('hidden');
+  const errorText = document.getElementById('error-text');
 
   try {
     const products = await fetchAllProducts();
     renderProducts(products);
   } catch (err) {
     console.error(err);
+    if (errorText) {
+      errorText.textContent = String(err?.message || '').includes('401')
+        ? 'La tienda está con contraseña en Shopify. Desactívala para ver el catálogo en la app.'
+        : 'No se pudieron cargar los productos.';
+    }
     errorEl.classList.remove('hidden');
   } finally {
     loading.classList.add('hidden');
@@ -395,15 +407,63 @@ window.addEventListener('appinstalled', () => {
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then((regs) => {
     Promise.all(regs.map((r) => r.update())).finally(() => {
-      navigator.serviceWorker.register('./sw.js?v=12').catch(console.error);
+      navigator.serviceWorker.register('./sw.js?v=13').catch(console.error);
     });
   });
 }
 
-loadProducts();
+function hideAppGate() {
+  if (!appGate) return;
+  appGate.classList.add('hidden');
+  appGate.setAttribute('aria-hidden', 'true');
+}
+
+function enterAppAfterGate() {
+  try {
+    sessionStorage.setItem(GATE_SESSION_KEY, '1');
+  } catch (_) {
+    /* ignore */
+  }
+  hideAppGate();
+  loadProducts();
+}
+
+function hasGateAccess() {
+  try {
+    return sessionStorage.getItem(GATE_SESSION_KEY) === '1';
+  } catch (_) {
+    return false;
+  }
+}
+
+if (gateForm) {
+  gateForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const value = (gatePassword?.value || '').trim();
+    if (value === APP_GATE_PASSWORD) {
+      gateError?.classList.add('hidden');
+      enterAppAfterGate();
+      return;
+    }
+    gateError?.classList.remove('hidden');
+    if (gatePassword) {
+      gatePassword.value = '';
+      gatePassword.focus();
+    }
+  });
+}
+
+if (hasGateAccess()) {
+  hideAppGate();
+  loadProducts();
+} else {
+  hideAppSplash();
+  setTimeout(() => gatePassword?.focus(), 400);
+}
+
 if (wantsInstall && !isStandalone) {
   showInstallBanner();
 }
 
 retryBtn.addEventListener('click', loadProducts);
-setTimeout(hideAppSplash, 1200);
+setTimeout(hideAppSplash, 900);
