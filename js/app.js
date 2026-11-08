@@ -33,6 +33,7 @@ const gatePassword = document.getElementById('gate-password');
 const gateError = document.getElementById('gate-error');
 const APP_GATE_PASSWORD = 'azul';
 const GATE_SESSION_KEY = 'artcuadros_gate_ok';
+const SHOP_HOME = 'https://artcuadros.com';
 
 const urlParams = new URLSearchParams(window.location.search);
 const wantsInstall = urlParams.get('install') === '1';
@@ -407,7 +408,7 @@ window.addEventListener('appinstalled', () => {
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then((regs) => {
     Promise.all(regs.map((r) => r.update())).finally(() => {
-      navigator.serviceWorker.register('./sw.js?v=14').catch(console.error);
+      navigator.serviceWorker.register('./sw.js?v=15').catch(console.error);
     });
   });
 }
@@ -424,8 +425,7 @@ function enterAppAfterGate() {
   } catch (_) {
     /* ignore */
   }
-  hideAppGate();
-  loadProducts();
+  window.location.replace(SHOP_HOME);
 }
 
 function hasGateAccess() {
@@ -439,8 +439,8 @@ function hasGateAccess() {
 if (gateForm) {
   gateForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const value = (gatePassword?.value || '').trim();
-    if (value === APP_GATE_PASSWORD) {
+    const value = (gatePassword?.value || '').trim().toLowerCase();
+    if (value === APP_GATE_PASSWORD.toLowerCase()) {
       gateError?.classList.add('hidden');
       enterAppAfterGate();
       return;
@@ -454,8 +454,7 @@ if (gateForm) {
 }
 
 if (hasGateAccess()) {
-  hideAppGate();
-  loadProducts();
+  window.location.replace(SHOP_HOME);
 } else {
   hideAppSplash();
   setTimeout(() => gatePassword?.focus(), 400);
@@ -465,5 +464,5 @@ if (wantsInstall && !isStandalone) {
   showInstallBanner();
 }
 
-retryBtn.addEventListener('click', loadProducts);
+retryBtn?.addEventListener('click', () => window.location.replace(SHOP_HOME));
 setTimeout(hideAppSplash, 900);
