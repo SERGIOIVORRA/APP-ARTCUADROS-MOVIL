@@ -33,7 +33,7 @@ const gatePassword = document.getElementById('gate-password');
 const gateError = document.getElementById('gate-error');
 const APP_GATE_PASSWORD = 'azul';
 const GATE_SESSION_KEY = 'artcuadros_gate_ok';
-const SHOP_HOME = 'https://artcuadros.com/password';
+const SHOP_HOME = 'https://artcuadros.com/password?password=azul';
 
 const urlParams = new URLSearchParams(window.location.search);
 const wantsInstall = urlParams.get('install') === '1';
@@ -408,7 +408,7 @@ window.addEventListener('appinstalled', () => {
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then((regs) => {
     Promise.all(regs.map((r) => r.update())).finally(() => {
-      navigator.serviceWorker.register('./sw.js?v=16').catch(console.error);
+      navigator.serviceWorker.register('./sw.js?v=17').catch(console.error);
     });
   });
 }
