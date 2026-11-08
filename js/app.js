@@ -31,7 +31,7 @@ const appGate = document.getElementById('app-gate');
 const gateForm = document.getElementById('gate-form');
 const gatePassword = document.getElementById('gate-password');
 const gateError = document.getElementById('gate-error');
-const APP_GATE_PASSWORD = 'TREN33';
+const APP_GATE_PASSWORD = 'azul';
 const GATE_SESSION_KEY = 'artcuadros_gate_ok';
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -407,7 +407,7 @@ window.addEventListener('appinstalled', () => {
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then((regs) => {
     Promise.all(regs.map((r) => r.update())).finally(() => {
-      navigator.serviceWorker.register('./sw.js?v=13').catch(console.error);
+      navigator.serviceWorker.register('./sw.js?v=14').catch(console.error);
     });
   });
 }
